@@ -192,23 +192,103 @@
             margin: 0;
         }
 
-        .health-warning {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
-            padding: 8px 16px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-radius: 6px;
+        /* Warning Modal Styles */
+        .warning-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .warning-modal.hidden {
+            display: none;
+        }
+
+        .warning-content {
+            background: linear-gradient(135deg, #18181b 0%, #27272a 100%);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(239, 68, 68, 0.3);
             text-align: center;
-            margin-top: 12px;
+            animation: warningPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes warningPop {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .warning-image {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            border: 3px solid rgba(239, 68, 68, 0.5);
+            padding: 3px;
+            background: #18181b;
+        }
+
+        .warning-image img {
             width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* History with max 2 lines and scroll */
+        #history-list {
+            max-height: 3.5em;
+            line-height: 1.75em;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #history-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+        }
+
+        #history-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+        }
+
+        #history-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
 <body class="bg-zinc-950 text-white overflow-hidden">
+    <!-- Warning Modal -->
+    <div id="warning-modal" class="warning-modal">
+        <div class="warning-content">
+            <div class="warning-image">
+                <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAB4AHgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAzJGLhFieCstEJFzc4UGJzgqSDk8RVGDU4K0RUZnaFpKW0wwkKGBsWIzRRYnJTgpRTgqPB0v/EAB0BAQACAwEBAQEAAAAAAAAAAAABAgQFBgMHCAn/xAAzEQACAQMCAwQJAwUAAAAAAAAAAQIDESEEEjExQQUTUWEiMnGBkaGxwdEUI/BC4fDx4v/aAAwDAQACEQMRAD8A/f6iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=" alt="Warning">
+            </div>
+            <h2 class="text-3xl font-black title-font text-red-400 mb-4">⚠️ ВНИМАНИЕ</h2>
+            <div class="text-lg font-bold text-red-300 mb-6 leading-relaxed">
+                ЧРЕЗМЕРНОЕ УПОТРЕБЛЕНИЕ<br>АЛКОГОЛЯ ВРЕДИТ<br>ВАШЕМУ ЗДОРОВЬЮ
+            </div>
+            <p class="text-zinc-400 text-sm mb-8">
+                Этот сайт создан исключительно в развлекательных целях. Пожалуйста, употребляйте алкоголь ответственно.
+            </p>
+            <button id="accept-warning-btn" class="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold py-4 px-12 rounded-full text-lg shadow-xl shadow-red-500/50 transition-all cursor-pointer">
+                Я понимаю и принимаю
+            </button>
+        </div>
+    </div>
+
     <div class="flex h-screen">
         <!-- Sidebar -->
         <div class="w-80 border-r border-zinc-800 flex flex-col hidden md:flex">
@@ -286,7 +366,7 @@
                     <div class="uppercase text-xs tracking-widest font-mono text-zinc-400 font-bold">История</div>
                     <div id="clear-history-btn" class="text-zinc-500 hover:text-zinc-300 cursor-pointer text-lg hover:scale-125 transition-transform">🗑️</div>
                 </div>
-                <div id="history-list" class="space-y-2 text-sm max-h-40 overflow-y-auto"></div>
+                <div id="history-list" class="space-y-2 text-sm"></div>
             </div>
         </div>
 
@@ -417,7 +497,7 @@
                 </div>
             </div>
 
-            <!-- Bottom Bar with Credits and Warning -->
+            <!-- Bottom Bar with Credits -->
             <div class="h-auto border-t border-zinc-800 px-6 py-3 text-xs text-zinc-500 font-mono bg-zinc-900/50 backdrop-blur-sm shrink-0">
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
                     <div class="flex items-center gap-x-2 justify-center sm:justify-start">
@@ -430,10 +510,6 @@
                         </a>
                         <span class="text-zinc-600 text-[10px]">(www.twitch.tv/mushketzabey)</span>
                     </div>
-                </div>
-                <!-- Health Warning -->
-                <div class="health-warning">
-                    ⚠️ ЧРЕЗМЕРНОЕ УПОТРЕБЛЕНИЕ АЛКОГОЛЯ ВРЕДИТ ВАШЕМУ ЗДОРОВЬЮ
                 </div>
             </div>
         </div>
@@ -510,12 +586,27 @@
         let currentWho = null;
         let currentDrink = null;
         let isSpinning = false;
-        let spinDuration = 4000;
+        let spinDuration = 4;
 
         const whoCanvas = document.getElementById('who-canvas');
         const drinkCanvas = document.getElementById('drink-canvas');
         const whoCtx = whoCanvas.getContext('2d');
         const drinkCtx = drinkCanvas.getContext('2d');
+
+        // Warning modal
+        const warningModal = document.getElementById('warning-modal');
+        const acceptWarningBtn = document.getElementById('accept-warning-btn');
+
+        // Check if user has already accepted warning
+        const hasAcceptedWarning = localStorage.getItem('alcoholWarningAccepted');
+        if (hasAcceptedWarning === 'true') {
+            warningModal.classList.add('hidden');
+        }
+
+        acceptWarningBtn.addEventListener('click', () => {
+            localStorage.setItem('alcoholWarningAccepted', 'true');
+            warningModal.classList.add('hidden');
+        });
 
         document.getElementById('add-player-btn').addEventListener('click', addPlayer);
         document.getElementById('add-drink-btn').addEventListener('click', addDrink);
@@ -564,8 +655,8 @@
             let total = 0;
             items.forEach(item => total += item.percent !== undefined ? item.percent : 1);
 
-            const fontSizeTitle = Math.max(14, w / 26);
-            const fontSizePercent = Math.max(10, w / 38);
+            const fontSizeTitle = Math.max(12, w / 32);
+            const fontSizePercent = Math.max(9, w / 45);
 
             items.forEach(item => {
                 const sliceAngle = (item.percent !== undefined ? item.percent : 1) / total * Math.PI * 2;
@@ -601,14 +692,14 @@
                 ctx.shadowColor = 'rgba(0,0,0,0.9)';
                 ctx.shadowBlur = 10;
                 ctx.shadowOffsetY = 3;
-                const displayText = item.name.length > 10 ? item.name.substring(0, 10) + '...' : item.name;
+                const displayText = item.name.length > 12 ? item.name.substring(0, 12) + '...' : item.name;
                 ctx.fillText(displayText, radius * 0.65, 0);
 
                 if (item.percent !== undefined) {
                     ctx.font = `bold ${fontSizePercent}px monospace`;
                     ctx.fillStyle = 'rgba(255,255,255,0.95)';
                     ctx.shadowBlur = 3;
-                    ctx.fillText(item.percent + '%', radius * 0.65, fontSizeTitle);
+                    ctx.fillText(item.percent + '%', radius * 0.65, fontSizeTitle + 2);
                 }
                 ctx.restore();
 
@@ -771,7 +862,7 @@
 
         function showSettings() {
             document.getElementById('settings-modal').classList.remove('hidden');
-            document.getElementById('spin-duration-input').value = spinDuration / 1000;
+            document.getElementById('spin-duration-input').value = spinDuration;
             renderDrinksSettings();
         }
 
@@ -811,7 +902,7 @@
         function saveSettings() {
             const inputValue = parseFloat(document.getElementById('spin-duration-input').value);
             if (inputValue >= 0.5 && inputValue <= 60) {
-                spinDuration = inputValue * 1000;
+                spinDuration = inputValue;
                 hideSettings();
                 renderDrinks();
                 drawWheel(drinkCtx, drinkCanvas, drinks);
@@ -866,7 +957,7 @@
             const fullSpins = 5 + Math.random() * 3;
             const totalRotation = fullSpins * 2 * Math.PI + targetAngle;
 
-            const duration = spinDuration;
+            const duration = spinDuration * 1000;
             const startTime = Date.now();
 
             function animate() {
@@ -937,7 +1028,7 @@
             const fullSpins = 5 + Math.random() * 3;
             const totalRotation = fullSpins * 2 * Math.PI + targetAngle;
 
-            const duration = spinDuration;
+            const duration = spinDuration * 1000;
             const startTime = Date.now();
 
             function animate() {
