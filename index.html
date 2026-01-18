@@ -267,6 +267,61 @@
         #history-list::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+
+        /* Editable item styles */
+        .item-name {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 100%;
+            color: inherit;
+            font-size: inherit;
+            font-weight: inherit;
+        }
+
+        .item-name:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .item-name:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .edit-icon {
+            opacity: 0;
+            transition: opacity 0.2s;
+            font-size: 14px;
+        }
+
+        .item-row:hover .edit-icon {
+            opacity: 1;
+        }
+
+        .drink-percent-input {
+            background: transparent;
+            border: 1px solid transparent;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 45px;
+            text-align: right;
+        }
+
+        .drink-percent-input:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .drink-percent-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(251, 191, 36, 0.5);
+        }
     </style>
 </head>
 <body class="bg-zinc-950 text-white overflow-hidden">
@@ -274,7 +329,7 @@
     <div id="warning-modal" class="warning-modal">
         <div class="warning-content">
             <div class="warning-image">
-                <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAB4AHgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAzJGLhFieCstEJFzc4UGJzgqSDk8RVGDU4K0RUZnaFpKW0wwkKGBsWIzRRYnJTgpRTgqPB0v/EAB0BAQACAwEBAQEAAAAAAAAAAAABAgQFBgMHCAn/xAAzEQACAQMCAwQJAwUAAAAAAAAAAQIDESEEEjExQQUTUWEiMnGBkaGxwdEUI/BC4fDx4v/aAAwDAQACEQMRAD8A/f6iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=" alt="Warning">
+                <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAB4AHgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAzJGLhFieCstEJFzc4UGJzgqSDk8RVGDU4K0RUZnaFpKW0wwkKGBsWIzRRYnJTgpRTgqPB0v/EAB0BAQACAwEBAQEAAAAAAAAAAAABAgQFBgMHCAn/xAAzEQACAQMCAwQJAwUAAAAAAAAAAQIDESEEEjExQQUTUWEiMnGBkaGxwdEU/9AAwDAQACEQMRAD8A/f6iiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigD/9k=" alt="Warning">
             </div>
             <h2 class="text-3xl font-black title-font text-red-400 mb-4">⚠️ ВНИМАНИЕ</h2>
             <div class="text-lg font-bold text-red-300 mb-6 leading-relaxed">
@@ -597,7 +652,6 @@
         const warningModal = document.getElementById('warning-modal');
         const acceptWarningBtn = document.getElementById('accept-warning-btn');
 
-        // Check if user has already accepted warning
         const hasAcceptedWarning = localStorage.getItem('alcoholWarningAccepted');
         if (hasAcceptedWarning === 'true') {
             warningModal.classList.add('hidden');
@@ -619,6 +673,31 @@
         document.getElementById('close-settings-btn').addEventListener('click', hideSettings);
         document.getElementById('save-settings-btn').addEventListener('click', saveSettings);
         document.getElementById('randomize-btn').addEventListener('click', randomizeOdds);
+
+        function editPlayerName(index, newName) {
+            if (newName && newName.trim() && newName !== players[index].name) {
+                players[index].name = newName.trim();
+                renderPlayers();
+                drawWheel(whoCtx, whoCanvas, players);
+            }
+        }
+
+        function editDrinkName(index, newName) {
+            if (newName && newName.trim() && newName !== drinks[index].name) {
+                drinks[index].name = newName.trim();
+                renderDrinks();
+                drawWheel(drinkCtx, drinkCanvas, drinks);
+            }
+        }
+
+        function editDrinkPercent(index, newPercent) {
+            const percent = parseInt(newPercent);
+            if (percent >= 1 && percent <= 100 && percent !== drinks[index].percent) {
+                drinks[index].percent = percent;
+                renderDrinks();
+                drawWheel(drinkCtx, drinkCanvas, drinks);
+            }
+        }
 
         function updateDrinkPercent(index, value) {
             const percent = parseInt(value);
@@ -810,12 +889,17 @@
             display.textContent = players.length;
 
             list.innerHTML = players.map((p, i) => `
-                <div class="flex items-center justify-between bg-zinc-800/50 hover:bg-zinc-800 p-3 rounded-lg group transition-all">
-                    <div class="flex items-center gap-x-2">
-                        <div class="w-4 h-4 rounded-full" style="background-color: #${p.color}"></div>
-                        <span class="font-medium text-sm">${p.name}</span>
+                <div class="flex items-center justify-between bg-zinc-800/50 hover:bg-zinc-800 p-3 rounded-lg group transition-all item-row">
+                    <div class="flex items-center gap-x-2 flex-1 min-w-0">
+                        <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: #${p.color}"></div>
+                        <input type="text" 
+                               value="${p.name}" 
+                               onchange="editPlayerName(${i}, this.value)"
+                               class="item-name font-medium text-sm flex-1 min-w-0"
+                               maxlength="30">
+                        <span class="edit-icon text-emerald-400">✏️</span>
                     </div>
-                    <button onclick="deletePlayer(${i})" class="text-zinc-500 hover:text-red-400 transition-colors text-lg opacity-0 group-hover:opacity-100">
+                    <button onclick="deletePlayer(${i})" class="text-zinc-500 hover:text-red-400 transition-colors text-lg opacity-0 group-hover:opacity-100 ml-2">
                         ✕
                     </button>
                 </div>
@@ -831,13 +915,24 @@
             display.textContent = drinks.length;
 
             list.innerHTML = drinks.map((d, i) => `
-                <div class="flex items-center justify-between bg-zinc-800/50 hover:bg-zinc-800 p-3 rounded-lg group transition-all">
-                    <div class="flex items-center gap-x-2 flex-1">
-                        <div class="w-4 h-4 rounded-full" style="background-color: #${d.color}"></div>
-                        <span class="font-medium text-sm">${d.name}</span>
+                <div class="flex items-center justify-between bg-zinc-800/50 hover:bg-zinc-800 p-3 rounded-lg group transition-all item-row">
+                    <div class="flex items-center gap-x-2 flex-1 min-w-0">
+                        <div class="w-4 h-4 rounded-full flex-shrink-0" style="background-color: #${d.color}"></div>
+                        <input type="text" 
+                               value="${d.name}" 
+                               onchange="editDrinkName(${i}, this.value)"
+                               class="item-name font-medium text-sm flex-1 min-w-0"
+                               maxlength="30">
+                        <span class="edit-icon text-amber-400">✏️</span>
                     </div>
                     <div class="flex items-center gap-x-2">
-                        <span class="text-xs font-mono text-zinc-400">${d.percent}%</span>
+                        <input type="number" 
+                               value="${d.percent}" 
+                               min="1" 
+                               max="100"
+                               onchange="editDrinkPercent(${i}, this.value)"
+                               class="drink-percent-input text-xs font-mono text-zinc-300">
+                        <span class="text-xs text-zinc-500">%</span>
                         <button onclick="deleteDrink(${i})" class="text-zinc-500 hover:text-red-400 transition-colors text-lg opacity-0 group-hover:opacity-100">
                             ✕
                         </button>
@@ -996,6 +1091,26 @@
         }
 
         function startDrinkSpin() {
+            // Если напиток один — не крутим второе колесо, сразу показываем результат
+            if (drinks.length === 1) {
+                currentDrink = drinks[0];
+                document.getElementById('who-wheel-screen').classList.add('hidden');
+                document.getElementById('drink-wheel-screen').classList.remove('hidden');
+                document.getElementById('current-stage').textContent = 'Что пить?';
+                document.getElementById('spin-status').textContent = currentWho + ' пьёт ' + currentDrink.name;
+                document.getElementById('drink-spinning-text').style.display = 'none';
+                document.getElementById('drink-result').classList.add('hidden');
+                document.getElementById('result-overlay').classList.remove('show');
+                document.getElementById('drink-winner').classList.remove('show');
+
+                // Рисуем колесо статично
+                drawWheel(drinkCtx, drinkCanvas, drinks, 0);
+
+                // Сразу показываем результат
+                showDrinkResult();
+                return;
+            }
+
             document.getElementById('who-wheel-screen').classList.add('hidden');
             document.getElementById('drink-wheel-screen').classList.remove('hidden');
             document.getElementById('current-stage').textContent = 'Что пить?';
